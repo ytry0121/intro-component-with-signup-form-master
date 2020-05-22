@@ -4,19 +4,24 @@ const f_name = document.getElementById("f-name");
 const l_name = document.getElementById("l-name");
 const email = document.getElementById("email");
 const password = document.getElementById("password");
-let flg = false;
 
 function inputCheck() {
-    flg = isEmpty(f_name);
-    flg = isEmpty(l_name);
-    flg = isValidEmail();
-    flg = isEmpty(password);
+    isEmpty(f_name);
+    isEmpty(l_name);
+    isValidEmail();
+    isEmpty(password);
+    if (!f_name.classList.contains("error-input")
+        && !l_name.classList.contains("error-input")
+        && !email.classList.contains("error-input")
+        && !password.classList.contains("error-input")) {
+        form.submit();
+    }
 
-    return flg;
 }
 
 function isEmpty(element) {
     if (element.value !== null && element.value !== '') {
+        removeError(element);
         return false;
     } else {
         const msg = element.placeholder + " cannot be empty";
@@ -33,6 +38,7 @@ function isValidEmail() {
         displayError(email, msg);
         return true;
     } else {
+        removeError(email);
         return false;
     }
 }
@@ -43,9 +49,15 @@ function displayError(element, error_msg) {
     document.getElementById(error_part_id).classList.add("error-icon");
     document.getElementById(error_msg_id).innerHTML = error_msg;
 }
+function removeError(element) {
+    const error_part_id = "error-" + element.id;
+    const error_msg_id = "error-msg-" + element.id;
+    element.classList.remove("error-input");
+    document.getElementById(error_part_id).classList.remove("error-icon");
+    document.getElementById(error_msg_id).innerHTML = "";
+}
+
 form.addEventListener("submit", function (event) {
     event.preventDefault();
-    if (!inputCheck()) {
-        form.submit();
-    }
+    inputCheck();
 });
